@@ -2,7 +2,7 @@
 
 /**
  * mailer
- * 
+ *
  * @author    Don Houle
  * @copyright 2023 Don Houle
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -25,11 +25,16 @@ class Emailer
 	public $emailMessage;
 
 	// can accept comma-separated email address
-	public function validateEmail(string $emailToCheck) 
+	public function validateEmail(string $emailToCheck)
 	{
 		//iterate over emails in string
-		$emails = explode(',', $emailToCheck);
-		foreach ($emails as $email) {	
+		if (stristr($emailToCheck, ',')) {
+			$emails = explode(',', $emailToCheck);
+		} else {
+			$emails[] = $emailToCheck;
+		}
+
+		foreach ($emails as $email) {
 			if(!filter_var(trim($email), FILTER_VALIDATE_EMAIL))
 			{
 				throw new Exception("Email address $email is not valid.");
@@ -41,7 +46,7 @@ class Emailer
 		}
 	}
 
-	protected function validateEmailSubject(string $subject) 
+	protected function validateEmailSubject(string $subject)
 	{
         if(! isset($subject) || $subject == '')
         {
@@ -53,7 +58,7 @@ class Emailer
 		}
 	}
 
-	protected function validateEmailMessage(string $message) 
+	protected function validateEmailMessage(string $message)
 	{
         if(! isset($message) || $message == '')
         {
@@ -101,7 +106,7 @@ class Emailer
 			$sanitizedSubject = $this->sanitizeInput($this->emailSubject);
 			$sanitizedMessage = $this->sanitizeInput($this->emailMessage);
 
-			$headers = $this->createHeaders($this->emailFromName, 
+			$headers = $this->createHeaders($this->emailFromName,
 				$this->emailFromAddress,
 				$this->emailReplyToAddress,
 				$this->emailReplyToName,
