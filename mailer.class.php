@@ -28,7 +28,7 @@ class Emailer
 	public function validateEmail(string $emailToCheck)
 	{
 		//iterate over emails in string
-		if (stristr($emailToCheck, ',')) {
+		if (str_contains($emailToCheck, ',')) {
 			$emails = explode(',', $emailToCheck);
 		} else {
 			$emails[] = $emailToCheck;
